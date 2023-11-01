@@ -14,9 +14,9 @@ var authtable = map[string]string{
 
 func CheckNameAndPass(name string, pass string) error {
 	if val, ok := authtable[name]; ok {
-        if strings.Compare(val, pass) == 0 {
+		if strings.Compare(val, pass) == 0 {
 			return nil
 		}
-    }
+	}
 	return errors.New("name or pass is disagreement")
 }
