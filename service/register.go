@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"hello/domain/config"
+	"hello/config"
 	"hello/domain/repository"
 	"io"
 	"net/http"

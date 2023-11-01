@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"hello/domain/config"
+	"hello/config"
 	"hello/domain/repository"
 	"hello/domain/server/session"
 )
