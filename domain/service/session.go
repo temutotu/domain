@@ -1,7 +1,7 @@
 package service
 
 import (
-	"hello/domain/server/session"
+	"domain/domain/server/session"
 	"net/http"
 )
 

@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 
-	"hello/config"
-	"hello/domain/repository"
+	"domain/config"
+	"domain/domain/repository"
 )
 
 const cokkieName string = "session"

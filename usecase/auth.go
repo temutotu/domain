@@ -1,9 +1,9 @@
 package usecase
 
 import (
+	"domain/domain"
+	"domain/domain/service"
 	"errors"
-	"hello/domain"
-	"hello/domain/service"
 	"net/http"
 )
 

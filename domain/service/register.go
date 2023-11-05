@@ -1,10 +1,10 @@
 package service
 
 import (
+	"domain/config"
+	"domain/domain/repository"
 	"errors"
 	"fmt"
-	"hello/config"
-	"hello/domain/repository"
 )
 
 type Register struct {

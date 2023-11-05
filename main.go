@@ -9,8 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"hello/domain/server/session"
-	"hello/interface/handler"
+	"domain/domain/server/session"
+	"domain/interface/handler"
 )
 
 func main() {

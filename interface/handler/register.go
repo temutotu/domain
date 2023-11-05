@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"hello/usecase"
+	"domain/usecase"
 	"io"
 	"net/http"
 )
