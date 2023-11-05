@@ -5,7 +5,6 @@ var autharray = map[string]string{
 	"mike": "america",
 	"leon": "german",
 	"次郎":   "日本",
-	"test": "test",
 }
 
 // 同様のデータをmySQLに入れる場合以下のクエリを実行

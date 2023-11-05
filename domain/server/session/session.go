@@ -1,19 +1,21 @@
 package session
 
 import (
-	"math/rand"
-	"errors"
-	"time"
 	"context"
+	"errors"
+	"math/rand"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
+const CokkieName string = "session"
+
 type manager struct {
-	redis *redis.Client
+	redis           *redis.Client
 	sessionIDLength int
-	lifeTime time.Duration
-	ctx *context.Context
+	lifeTime        time.Duration
+	ctx             *context.Context
 }
 
 var sessionManager *manager = nil
@@ -24,14 +26,14 @@ func Init(ctx *context.Context) error {
 	}
 
 	sessionManager = &manager{
-		sessionIDLength:	16,
-		lifeTime:	30*time.Second,
-		ctx:	ctx,
+		sessionIDLength: 16,
+		lifeTime:        30 * time.Second,
+		ctx:             ctx,
 	}
 	sessionManager.redis = redis.NewClient(&redis.Options{
-		Addr:	"localhost:6379",
-		Password:	"",
-		DB:	0,
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
 	})
 
 	return nil
@@ -39,7 +41,7 @@ func Init(ctx *context.Context) error {
 
 func Create() (string, error) {
 	if sessionManager == nil {
-		return "", errors.New("sessionManager is not exist");
+		return "", errors.New("sessionManager is not exist")
 	}
 
 	sessionID := CreateSessionID(sessionManager.sessionIDLength)
@@ -64,7 +66,7 @@ func CreateSessionID(sessionIDLength int) string {
 
 func Get(key string) (string, error) {
 	if sessionManager == nil {
-		return "", errors.New("sessionManager is not exist");
+		return "", errors.New("sessionManager is not exist")
 	}
 	session, err := sessionManager.redis.Get(*sessionManager.ctx, key).Result()
 	if err != nil {

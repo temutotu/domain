@@ -9,16 +9,15 @@ import (
 	"os/signal"
 	"syscall"
 
-	"hello/domain/server/handler"
 	"hello/domain/server/session"
+	"hello/interface/handler"
 )
 
 func main() {
 	ctx := context.Background()
 	session.Init(&ctx)
 
-	mainHandler := handler.MainHandler{}
-	mainHandler.CommonHanlerInit()
+	handler.HanlerInit()
 	go func() {
 		sigChan := make(chan os.Signal, 1)
 		signal.Ignore()

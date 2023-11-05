@@ -1,113 +1,40 @@
 package service
 
 import (
-	"fmt"
-	"io"
-	"net/http"
+	"errors"
 
 	"hello/config"
 	"hello/domain/repository"
-	"hello/domain/server/session"
 )
 
 const cokkieName string = "session"
 
-func Authorize(writer http.ResponseWriter, r *http.Request) {
-	// 最初にセッションがあるかチェック
-	_, err := r.Cookie(cokkieName)
-	if err == nil {
-		http.Redirect(writer, r, "http://localhost:8080/main/", 301)
-		return
-	}
-	enteredName := r.FormValue("name")
-	enteredPass := r.FormValue("pass")
-	if enteredName == "" || enteredPass == "" {
-		io.WriteString(writer, "name or pass param is empty")
-		return
-	}
+type Auth struct {
+	repo repository.Repo
+}
 
-	//認証処理
+func NewAuthService() (*Auth, error) {
 	repo := repository.GetRepoInterface(config.Conf.Repository)
-	result, err := repo.Search(enteredName)
-	if err != nil {
-		fmt.Println(err)
-		io.WriteString(writer, "search is falied")
-		return
+	if repo == nil {
+		return nil, errors.New("failed get repo")
 	}
 
-	if enteredPass != result {
-		io.WriteString(writer, "authorize is failed")
-		return
-	}
-	//認証処理終わり
-
-	//　ここでセッションを作成
-	sessionID, err := session.Create()
-	if err != nil {
-		fmt.Println(err)
-		io.WriteString(writer, "session create is failed")
-		return
+	service := &Auth{
+		repo: repo,
 	}
 
-	cookie := &http.Cookie{
-		Name:  "session",
-		Value: sessionID,
-	}
-	http.SetCookie(writer, cookie)
-	io.WriteString(writer, "authorize is successed")
+	return service, nil
 }
 
-func AuthorizeFromArray(writer http.ResponseWriter, r *http.Request) {
-	// 最初にセッションがあるかチェック
-	_, err := r.Cookie(cokkieName)
-	if err == nil {
-		http.Redirect(writer, r, "http://localhost:8080/main/", 301)
-		return
-	}
-	enteredName := r.FormValue("name")
-	enteredPass := r.FormValue("pass")
-	if enteredName == "" || enteredPass == "" {
-		io.WriteString(writer, "name or pass param is empty")
-		return
-	}
-
-	repository := &repository.AssiociativeArray{}
-	result, _ := repository.Search(enteredName)
-	if enteredPass == result {
-		io.WriteString(writer, "authorize is successed")
-		return
-	}
-
-	io.WriteString(writer, "authorize is faied")
-}
-
-func AuthorizeFromDB(writer http.ResponseWriter, r *http.Request) {
-	// 最初にセッションがあるかチェック
-	_, err := r.Cookie(cokkieName)
-	if err == nil {
-		http.Redirect(writer, r, "http://localhost:8080/main/", 301)
-		return
-	}
-	enteredName := r.FormValue("name")
-	enteredPass := r.FormValue("pass")
-	if enteredName == "" || enteredPass == "" {
-		io.WriteString(writer, "name or pass param is empty")
-		return
-	}
-	// result is repository.User struct
-	repo := repository.GetRepoInterface("MySQL")
-	result, err := repo.Search(enteredName)
+func (self *Auth) Authorize(name string, pass string) error {
+	result, err := self.repo.Search(name)
 	if err != nil {
-		fmt.Println(err)
-		io.WriteString(writer, "search is falied")
-		return
+		return errors.New("search is falied")
 	}
 
-	if enteredPass == result {
-		io.WriteString(writer, "authorize is successed")
-		return
+	if pass != result {
+		return errors.New("authorize is failed")
 	}
 
-	io.WriteString(writer, "authorize is faied")
-
+	return nil
 }

@@ -61,24 +61,6 @@ func (h *MySQL) Search(name string) (string, error) {
 	return "", nil
 }
 
-func InsertMySQL(name string, pass string) error {
-	db, err := sql.Open("mysql", "root:@(127.0.0.1:3306)/domain")
-	defer db.Close()
-
-	if err != nil {
-		return err
-	}
-
-	ins, err := db.Prepare("INSERT INTO users(name, pass) VALUES(?,?)")
-	if err != nil {
-		return err
-	}
-
-	ins.Exec(name, pass)
-
-	return nil
-}
-
 func (h *MySQL) Add(name string, pass string) error {
 	db, err := sql.Open("mysql", "root:@(127.0.0.1:3306)/domain")
 	defer db.Close()
