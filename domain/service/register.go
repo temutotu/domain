@@ -4,7 +4,6 @@ import (
 	"domain/config"
 	"domain/domain/repository"
 	"errors"
-	"fmt"
 )
 
 type Register struct {
@@ -27,7 +26,6 @@ func NewRegisterService() (*Register, error) {
 func (self *Register) Register(name string, pass string) error {
 	err := self.repo.Add(name, pass)
 	if err != nil {
-		fmt.Println(err)
 		return errors.New("register to DB failed")
 	}
 
